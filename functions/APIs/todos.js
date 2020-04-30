@@ -1,7 +1,7 @@
 const { db } = require('../util/admin')
 
 exports.getAllTodos = (request, response) => {
-    db.collection('todos').orderBy('createdAt', 'desc').get().then((data) => {
+    db.collection('todos').where('username', '==', request.user.username).orderBy('createdAt', 'desc').get().then((data) => {
         let todos = []
         data.forEach((doc) => {
             todos.push({
@@ -31,6 +31,7 @@ exports.postOneTodo = (request, response) => {
     const newToDoItem = {
         title: request.body.title,
         body: request.body.body,
+        username: request.user.username,
         createdAt: new Date().toISOString()
     }
 
@@ -45,12 +46,17 @@ exports.postOneTodo = (request, response) => {
     })
 }
 
+
+
 exports.deleteTodo = (request, response) => {
     const document = db.doc(`/todos/${request.params.todoId}`)
 
     document.get().then((doc) => {
         if (!doc.exists) {
             return response.status(400).json({ error: 'Where my todo at?'})
+        }
+        if(doc.data().username !== request.user.username){
+            return response.status(403).json({ error: "Unauthorized" })
         }
         return document.delete()
     })
@@ -65,15 +71,14 @@ exports.deleteTodo = (request, response) => {
 
 exports.editTodo = ( request, response ) => { 
     if(request.body.todoId || request.body.createdAt){
-        response.status(403).json({message: 'Not allowed to edit'});
+        response.status(403).json({message: 'Not allowed to edit'})
     }
-    let document = db.collection('todos').doc(`${request.params.todoId}`);
-    // TO CHECK -> before had it as document.update(request.body) 
+    let document = db.collection('todos').doc(`${request.params.todoId}`)
+    // TO CHECK -> currently at document.update(request.body) 
     // BUT giving an error "Update() requires either a single JavaScript object or an alternating list of field/value pairs
     //that can be followed by an optional precondition."
-    document.update({title: true, body: true})
-    .then(()=> {
-        response.json({message: 'Updated successfully'});
+    document.update(request.body).then(()=> {
+        response.json({message: 'Updated successfully'})
     })
     .catch((err) => {
         console.error(err);

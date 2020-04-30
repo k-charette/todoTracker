@@ -70,8 +70,6 @@ exports.signUpUser = (request, response) => {
             lastName: newUser.lastName,
             username: newUser.username,
             email: newUser.email,
-            password: newUser.password,
-            confirmPassword: newUser.confirmPassword,
             createdAt: new Date().toISOString(),
             userId
         }
@@ -152,5 +150,32 @@ exports.uploadProfilePhoto = (request, response) => {
         })
     })
     return busboy.end(request.rawBody)
+}
+
+exports.getUserDetail = (request, response) => {
+    let userData = {}
+    db.doc(`/users/${request.user.username}`).get().then((doc) => {
+        if(doc.exists) {
+            userData.userCredentials = doc.data()
+            return response.json(userData)
+        }
+    })
+    .catch((error) => {
+        console.error(error)
+        return response.status(500).json({ error: error.code })
+    })
+}
+
+exports.updateUserDetails = (request, response) => {
+    let document = db.collection('users').doc(`${request.user.username}`)
+    document.update(request.body).then(() => {
+        return response.json({message: 'User updated successfully'})
+    })
+    .catch((err) => {
+        console.error(err)
+        return response.status(500).json({
+            message: "Cannot update the values"
+        })
+    })
 }
 
