@@ -10,8 +10,6 @@ firebase-debug.log*
 .firebase/
 
 # Firebase config
-.env
-todoapp-89149-firebase-adminsdk-5rbvc-ca8c39f1e1.json
 
 # Uncomment this if you'd like others to create their own Firebase project.
 # For a team working on the same Firebase project(s), it is recommended to leave

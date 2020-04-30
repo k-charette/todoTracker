@@ -15,7 +15,7 @@ exports.getAllTodos = (request, response) => {
     })
     .catch((err) => {
         console.log(err)
-        return response.status(500).json({error: err.code})
+        return response.status(500).json({ error: err.code })
     })
 }
 
@@ -44,3 +44,41 @@ exports.postOneTodo = (request, response) => {
         console.error(err)
     })
 }
+
+exports.deleteTodo = (request, response) => {
+    const document = db.doc(`/todos/${request.params.todoId}`)
+
+    document.get().then((doc) => {
+        if (!doc.exists) {
+            return response.status(400).json({ error: 'Where my todo at?'})
+        }
+        return document.delete()
+    })
+    .then(() => {
+        response.json({ message: 'Begone Todo!'})
+    })
+    .catch((err) => {
+        console.error(err)
+        return response.status(500).json({ error: err.code })
+    })
+}
+
+exports.editTodo = ( request, response ) => { 
+    if(request.body.todoId || request.body.createdAt){
+        response.status(403).json({message: 'Not allowed to edit'});
+    }
+    let document = db.collection('todos').doc(`${request.params.todoId}`);
+    // TO CHECK -> before had it as document.update(request.body) 
+    // BUT giving an error "Update() requires either a single JavaScript object or an alternating list of field/value pairs
+    //that can be followed by an optional precondition."
+    document.update({title: true, body: true})
+    .then(()=> {
+        response.json({message: 'Updated successfully'});
+    })
+    .catch((err) => {
+        console.error(err);
+        return response.status(500).json({ 
+                error: err.code 
+        });
+    });
+};
