@@ -1,159 +1,120 @@
-import React, { Component } from 'react';
-import Avatar from '@material-ui/core/Avatar';
-import Button from '@material-ui/core/Button';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
-import Link from '@material-ui/core/Link';
-import Grid from '@material-ui/core/Grid';
-import LockOutlinedIcon from '@material-ui/icons/LockOutlined';
-import Typography from '@material-ui/core/Typography';
-import withStyles from '@material-ui/core/styles/withStyles';
-import Container from '@material-ui/core/Container';
-import CircularProgress from '@material-ui/core/CircularProgress';
-
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom'
+import _ from 'lodash'
 import axios from 'axios';
 
-const styles = (theme) => ({
-	paper: {
-		marginTop: theme.spacing(8),
-		display: 'flex',
-		flexDirection: 'column',
-		alignItems: 'center'
-	},
-	avatar: {
-		margin: theme.spacing(1),
-		backgroundColor: theme.palette.secondary.main
-	},
-	form: {
-		width: '100%',
-		marginTop: theme.spacing(1)
-	},
-	submit: {
-		margin: theme.spacing(3, 0, 2)
-	},
-	customError: {
-		color: 'red',
-		fontSize: '0.8rem',
-		marginTop: 10
-	},
-	progess: {
-		position: 'absolute'
-	}
-});
+const Login = (props) => {
 
-class Login extends Component {
-	constructor(props) {
-		super(props);
+	const [user, setUser] = useState({
+		email: '',
+		password: '',
+		loading: false
+	})
+	const [errors, setErrors] = useState({})
 
-		this.state = {
-			email: '',
-			password: '',
-			errors: [],
-			loading: false
-		};
+	const validForSubmission = () => {
+		let submitErrors = {}
+		const requiredFields = ["password", "email"]
+		requiredFields.forEach(field => {
+			if(user[field].trim() === ''){
+				submitErrors = {
+					...submitErrors,
+					[field]: `${field} required`
+				}
+			}
+		})
+		setErrors(submitErrors)
+		return _.isEmpty(submitErrors)
 	}
 
-	handleChange = (event) => {
-		this.setState({
-			[event.target.name]: event.target.value
-		});
-	};
+	const handleChange = (event) => {
+		setUser({
+			...user, [event.target.name]: event.target.value
+		})
+	}
 
-	handleSubmit = (event) => {
-		event.preventDefault();
-		this.setState({ loading: true });
-		const userData = {
-			email: this.state.email,
-			password: this.state.password
-		};
-		axios
-			.post('/login', userData)
-			.then((response) => {
-				localStorage.setItem('AuthToken', `Bearer ${response.data.token}`);
-				this.setState({ 
-					loading: false,
-				});		
-				this.props.history.push('/');
+	const handleSubmit = (event) => {
+		event.preventDefault()
+		if (validForSubmission()){
+			setUser({
+				loading: true
 			})
-			.catch((error) => {				
-				this.setState({
+			const userData = {
+				email: user.email,
+				password: user.password
+			}
+			axios.post('/login', userData).then((response) => {
+				localStorage.setItem('AuthToken', `Bearer ${response.data.token}`)
+				setUser({
+					loading: false
+				})
+				props.history.push('/')
+			})
+			.catch((error) => {
+				setUser({
 					errors: error.response.data,
 					loading: false
-				});
-			});
-	};
-
-	render() {
-		const { classes } = this.props;
-		const { errors, loading } = this.state;
-		return (
-			<Container component="main" maxWidth="xs">
-				<CssBaseline />
-				<div className={classes.paper}>
-					<Avatar className={classes.avatar}>
-						<LockOutlinedIcon />
-					</Avatar>
-					<Typography component="h1" variant="h5">
-						Login
-					</Typography>
-					<form className={classes.form} noValidate>
-						<TextField
-							variant="outlined"
-							margin="normal"
-							required
-							fullWidth
-							id="email"
-							label="Email Address"
-							name="email"
-							autoComplete="email"
-							autoFocus
-							helperText={errors.email}
-							error={errors.email ? true : false}
-							onChange={this.handleChange}
-						/>
-						<TextField
-							variant="outlined"
-							margin="normal"
-							required
-							fullWidth
-							name="password"
-							label="Password"
-							type="password"
-							id="password"
-							autoComplete="current-password"
-							helperText={errors.password}
-							error={errors.password ? true : false}
-							onChange={this.handleChange}
-						/>
-						<Button
-							type="submit"
-							fullWidth
-							variant="contained"
-							color="primary"
-							className={classes.submit}
-							onClick={this.handleSubmit}
-							disabled={loading || !this.state.email || !this.state.password}
-						>
-							Sign In
-							{loading && <CircularProgress size={30} className={classes.progess} />}
-						</Button>
-						<Grid container>
-							<Grid item>
-								<Link href="signup" variant="body2">
-									{"Don't have an account? Sign Up"}
-								</Link>
-							</Grid>
-						</Grid>
-						{errors.general && (
-							<Typography variant="body2" className={classes.customError}>
-								{errors.general}
-							</Typography>
-						)}
-					</form>
-				</div>
-			</Container>
-		);
+				})
+			})
+		}
 	}
+
+	return (
+		<>
+		<section className='absolute w-full h-full'>
+			<div className='container mx-auto px-4 h-full '>
+				<div className='flex content-center items-center justify-center h-full'>
+					<div className="w-full lg:w-4/12 px-4">
+						<div className='relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-300 border-0'>
+							<form className="px-8 pt-6 pb-8 mb-4">
+								<div className="mb-4">
+								<label className="block uppercase text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+									Email
+								</label>
+								<input 
+									className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+									id="email" 
+									name="email"
+									type="text"
+									placeholder="Email"
+									onChange={handleChange}
+								/>
+								<p className='text-red-400'>{errors.email}</p>
+								</div>
+								<div className="mb-6">
+								<label className="block uppercase text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+									Password
+								</label>
+								<input 
+									className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" 
+									id="password" 
+									name="password"
+									type="password" 
+									placeholder="Password"
+									onChange={handleChange}
+								/>
+								<p className='text-red-400'>{errors.password}</p>
+								</div>
+								<div className="flex flex-wrap items-center justify-between">
+								<button 
+									className="w-full mb-4 bg-gray-900 active:bg-gray-700 text-white font-bold py-2 px-4 rounded shadow hover:shadow-lg focus:outline-none focus:shadow-outline" 
+									type="button"
+									onClick={handleSubmit}
+								>
+									Sign In
+								</button>
+								<Link className="inline-block align-baseline mx-auto font-bold text-sm text-blue-800 hover:text-blue-600" to='/signup'>
+									Forgot Password?
+								</Link>
+								</div>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</section>
+		</>
+	)
 }
 
-export default withStyles(styles)(Login);
+export default Login

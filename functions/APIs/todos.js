@@ -46,8 +46,6 @@ exports.postOneTodo = (request, response) => {
     })
 }
 
-
-
 exports.deleteTodo = (request, response) => {
     const document = db.doc(`/todos/${request.params.todoId}`)
 
