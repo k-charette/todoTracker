@@ -9,7 +9,7 @@ import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import NotesIcon from '@material-ui/icons/Notes';
 import withStyles from '@material-ui/core/styles/withStyles';
 
-const Home = (props) => {
+const Home = ({history, classes}) => {
     const [render, setRender] = useState({
         render: false
     })
@@ -36,11 +36,11 @@ const Home = (props) => {
 
     const logoutHandler = (event) => {
         localStorage.removeItem('AuthToken')
-        props.history.push('/login')
+        .history.push('/login')
     }
 
     useEffect(() => {
-        authMiddleWare(props.history)
+        authMiddleWare(history)
         const authToken = localStorage.getItem('AuthToken')
         axios.defaults.headers.common = { Authorization: `${authToken}`}
         axios.get('/user').then((response) => {
@@ -56,31 +56,30 @@ const Home = (props) => {
         })
         .catch((error) => {
             if(error.response.status === 400) {
-                props.history.push('/login')
+                history.push('/login')
             }
             console.log(error)
             setAuthUser({ errorMsg: 'Error in getting the data' })
         })
-    }, [props.history])
+    }, [history])	
 
-    const { classes } = props;	
-		if (authUser.uiLoading === true) {
-			return (
-				<div className={classes.root}>
-					{authUser.uiLoading && <CircularProgress size={150} className={classes.uiProgess} />}
-				</div>
-			);
+	if (authUser.uiLoading === true) {
+        return (
+            <div className={classes.root}>
+                {authUser.uiLoading && <CircularProgress size={150} className={classes.uiProgess} />}
+            </div>
+        );
 	} else {
     return(
         <div className={classes.root}>
-					<CssBaseline />
-					<AppBar position="fixed" className={classes.appBar}>
-						<Toolbar>
-							<Typography variant="h6" noWrap>
-								Todo Tracker 
-							</Typography>
-						</Toolbar>
-					</AppBar>
+			<CssBaseline />
+                <AppBar position="fixed" className={classes.appBar}>
+                    <Toolbar>
+                        <Typography variant="h6" noWrap>
+                            Todo Tracker 
+                        </Typography>
+                    </Toolbar>
+                </AppBar>
 					<Drawer
                         anchor='left'
 						className={classes.drawer}
@@ -115,7 +114,6 @@ const Home = (props) => {
 								</ListItemIcon>
 								<ListItemText primary="Account" />
 							</ListItem>
-
 							<ListItem button key="Logout" onClick={logoutHandler}>
 								<ListItemIcon>
 									{' '}
@@ -125,9 +123,11 @@ const Home = (props) => {
 							</ListItem>
 						</List>
 					</Drawer>
-
-					<div>{render.render ? <Account /> : <Todo />}</div>
-				</div>
+			<div className={classes.content}>
+                <div className={classes.toolbar}/>
+                    {render.render ? <Account /> : <Todo />}
+            </div>
+		</div>
     )
     }
 }
@@ -137,7 +137,12 @@ const styles = (theme) => ({
 	root: {
         display: 'flex',
         flexWrap: 'wrap'
-	},
+    },
+    content: {
+        flexGrow: 1,
+        padding: theme.spacing(3),
+        margin: 'auto'
+    },
 	appBar: {
         zIndex: theme.zIndex.drawer + 1,
         position: 'fixed',
@@ -150,10 +155,6 @@ const styles = (theme) => ({
 	drawerPaper: {
         width: drawerWidth,
         backgroundColor: '#f5f5f5'
-	},
-	content: {
-		flexGrow: 1,
-		padding: theme.spacing(3)
 	},
 	avatar: {
 		height: 110,
