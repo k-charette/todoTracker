@@ -12,11 +12,14 @@ const AccountProfile = ({history, classes, ...rest}) => {
         lastName: '',
         email: '',
         username: '',
-        profilePicture: '',
         uiLoading: true,
         buttonLoading: false,
         errors: '',
         imageError: ''
+    })
+
+    const [profilePicture, setProfilePicture] = useState({
+        profilePicture: '',
     })
 
     useEffect(() => {
@@ -74,8 +77,8 @@ const AccountProfile = ({history, classes, ...rest}) => {
     }
 
     const handleImageChange = (event) => {
-        setUserInfo({
-            image: event.target.files[0]
+        setProfilePicture({
+            image: event.target.files[0],
         })
     }
 
@@ -87,7 +90,7 @@ const AccountProfile = ({history, classes, ...rest}) => {
         authMiddleWare(history)
         const authToken = localStorage.getItem('AuthToken')
         let form_data = new FormData()
-            form_data.append('image', userInfo.image)
+            form_data.append('image', profilePicture.image)
             form_data.append('content', userInfo.content)
             axios.defaults.headers.common = { Authorization: `${authToken}`}
 
@@ -106,6 +109,10 @@ const AccountProfile = ({history, classes, ...rest}) => {
             }
             console.log(error)
             setUserInfo({
+                firstName: userInfo.firstName,
+                lastName: userInfo.lastName,
+                username: userInfo.username,
+                email: userInfo.email,
                 uiLoading: false,
                 imageError: 'Error in posting the data'
             })
@@ -117,7 +124,6 @@ const AccountProfile = ({history, classes, ...rest}) => {
         return (
             <div className={classes.content}>
                 <div className={classes.toolbar}/>
-                {console.log(userInfo.uiLoading)}
                 {userInfo.uiLoading && <CircularProgress size={150} className={classes.uiProgress}/>}
             </div>
         )
@@ -135,10 +141,11 @@ const AccountProfile = ({history, classes, ...rest}) => {
                             >
                                 {firstName} {lastName} / {username}
                             </Typography>
+                            <input className={classes.chooseFile} type='file' onChange={handleImageChange}/>
                             <Button 
                                 className='classes.uploadButton'
-                                color='primary'
-                                variant='text'
+                                color='default'
+                                variant='contained'
                                 type='submit'
                                 startIcon={<CloudUploadIcon/>}
                                 size='small'
@@ -146,7 +153,7 @@ const AccountProfile = ({history, classes, ...rest}) => {
                             >
                                 Upload Photo
                             </Button>
-                            <input type='file' onChange={handleImageChange}/>
+                            
                             {userInfo.imageError ? (
                                 <div className={classes.customError}>
                                     {' '}
@@ -193,6 +200,7 @@ const AccountProfile = ({history, classes, ...rest}) => {
                                 </Grid>
                                 <Grid item md={6} xs={12}>
                                     <TextField
+                                        disabled
                                         fullWidth
                                         label='Email'
                                         margin='dense'
@@ -205,6 +213,7 @@ const AccountProfile = ({history, classes, ...rest}) => {
                                 </Grid>
                                 <Grid item md={6} xs={12}>
                                     <TextField
+                                        disabled
                                         fullWidth
                                         label='Username'
                                         margin='dense'
@@ -256,8 +265,11 @@ const styles = (theme) => ({
         left: '50%',
         top: '35%'
     },
+    chooseFile: {
+        margin: theme.spacing(2)
+    },
     uploadButton: {
-        marginRight: theme.spacing(2)
+        margin: theme.spacing(1)
     },
     customError: {
         color: 'red',
@@ -265,7 +277,8 @@ const styles = (theme) => ({
         marginTop: 10
     },
     submitButton: {
-        marginTop: '10px'
+        marginTop: '10px',
+        backgroundColor: '#039be5'
     },
     details: {
         display: 'flex',

@@ -5,7 +5,8 @@ import Signup from './pages/Signup'
 import Home from './pages/Home'
 import './styles/app.css'
 
-function App() {
+const App = (props) => {
+  console.log(props)
   return (
     <div>
       <Switch>
