@@ -33,7 +33,7 @@ const Login = (props) => {
 		})
 	}
 
-	const handleSubmit = (event) => {
+	const handleSubmit = async (event) => {
 		event.preventDefault()
 		if (validForSubmission()){
 			setUser({
@@ -43,19 +43,20 @@ const Login = (props) => {
 				email: user.email,
 				password: user.password
 			}
-			axios.post('/login', userData).then((response) => {
+		try {
+			await axios.post('/login', userData).then((response) => {
 				localStorage.setItem('AuthToken', `Bearer ${response.data.token}`)
 				setUser({
 					loading: false
 				})
 				props.history.push('/')
 			})
-			.catch((error) => {
+		} catch(error) {
 				setUser({
 					errors: error.response.data,
 					loading: false
 				})
-			})
+			}
 		}
 	}
 
@@ -103,7 +104,7 @@ const Login = (props) => {
 									Sign In
 								</button>
 								<Link className="inline-block align-baseline mx-auto font-bold text-sm text-blue-800 hover:text-blue-600" to='/signup'>
-									Forgot Password?
+									Don't have an account? Sign Up!
 								</Link>
 								</div>
 							</form>

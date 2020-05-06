@@ -38,7 +38,7 @@ const Signup = (props) => {
         })
     }
 
-    const handleSubmit = (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
         if(validForSubmission()) {
             setNewUser({ loading: true })
@@ -50,20 +50,20 @@ const Signup = (props) => {
                 password: newUser.password,
                 confirmPassword: newUser.confirmPassword
             }
-
-            axios.post('/signup', newUserData).then((response) => {
+        try{
+            await axios.post('/signup', newUserData).then((response) => {
                 localStorage.setItem('AuthToken', `Bearer ${response.data.token}`)
                 setNewUser({
                     loading: false
                 })
                 props.history.push('/')
             })
-            .catch((error) => {
+        } catch(error){
                 setNewUser({
                     errors: error.response.data,
                     loading: false
                 })
-            })
+            }
         }
     }   
 

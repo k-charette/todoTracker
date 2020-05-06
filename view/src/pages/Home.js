@@ -10,7 +10,7 @@ import NotesIcon from '@material-ui/icons/Notes';
 import withStyles from '@material-ui/core/styles/withStyles';
 
 const Home = ({history, classes}) => {
-    const [render, setRender] = useState({
+    const [loadPage, setLoadPage] = useState({
         render: false
     })
 
@@ -21,22 +21,22 @@ const Home = ({history, classes}) => {
         uiLoading: true,
         imageLoading: false
     })
-
+    
     const loadAccountPage = (event) => {
-        setRender({
-            render: true
+        setLoadPage({
+            render: false
         })
     }
 
     const loadTodoPage = (event) => {
-        setRender({
-            render: false
+        setLoadPage({
+            render: true
         })
     }
 
     const logoutHandler = (event) => {
         localStorage.removeItem('AuthToken')
-        .history.push('/login')
+        history.push('/login')
     }
 
     useEffect(() => {
@@ -125,7 +125,7 @@ const Home = ({history, classes}) => {
 					</Drawer>
 			<div className={classes.content}>
                 <div className={classes.toolbar}/>
-                    {render.render ? <Account /> : <Todo />}
+                    {loadPage.render ? <Todo /> : <Account /> }
             </div>
 		</div>
     )
