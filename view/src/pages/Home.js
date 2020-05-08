@@ -3,7 +3,7 @@ import axios from 'axios'
 import { authMiddleWare } from '../util/auth'
 import Account from '../components/Account';
 import Todo from '../components/Todo';
-import {Drawer, AppBar, CssBaseline, Toolbar, List, Typography, Divider, ListItem, ListItemIcon, ListItemText, Avatar, CircularProgress } from '@material-ui/core';
+import { Drawer, AppBar, CssBaseline, Toolbar, List, Typography, Divider, ListItem, ListItemIcon, ListItemText, Avatar, CircularProgress } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import NotesIcon from '@material-ui/icons/Notes';
@@ -61,12 +61,14 @@ const Home = ({history, classes}) => {
             console.log(error)
             setAuthUser({ errorMsg: 'Error in getting the data' })
         })
-    }, [history])	
+    }, [history])
 
-	if (authUser.uiLoading === true) {
+    const { firstName, lastName, profilePicture, uiLoading } = authUser
+
+	if (uiLoading === true) {
         return (
             <div className={classes.root}>
-                {authUser.uiLoading && <CircularProgress size={150} className={classes.uiProgess} />}
+                {uiLoading && <CircularProgress size={150} className={classes.uiProgess} />}
             </div>
         );
 	} else {
@@ -91,14 +93,14 @@ const Home = ({history, classes}) => {
 						<div className={classes.toolbar} />
 						<Divider />
 						<center>
-							<Avatar src={authUser.profilePicture} className={classes.avatar} />
-							<p>
+							<Avatar src={profilePicture} className={classes.avatar} />
+							<p className={classes.nameText}>
 								{' '}
-								{authUser.firstName} {authUser.lastName}
+								{firstName} {lastName}
 							</p>
 						</center>
 						<Divider />
-						<List>
+						<List className={classes.directoryText}>
 							<ListItem button key="Todo" onClick={loadTodoPage}>
 								<ListItemIcon>
 									{' '}
@@ -146,11 +148,12 @@ const styles = (theme) => ({
 	appBar: {
         zIndex: theme.zIndex.drawer + 1,
         position: 'fixed',
-        backgroundColor: '#039be5'
+        backgroundColor: '#63B3ED'
 	},
 	drawer: {
 		width: drawerWidth,
-		flexShrink: 0
+        flexShrink: 0,
+        color: '#4A5568'
 	},
 	drawerPaper: {
         width: drawerWidth,
@@ -163,7 +166,13 @@ const styles = (theme) => ({
         flexGrow: 0,
         marginTop: 20,
         marginBottom: 20
-	},
+    },
+    nameText: {
+        color: '#4A5568'
+    },
+    directoryText: {
+        color: '#4A5568'
+    },
 	uiProgess: {
 		position: 'fixed',
 		zIndex: '1000',

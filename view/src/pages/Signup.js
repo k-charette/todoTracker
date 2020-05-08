@@ -24,7 +24,7 @@ const Signup = (props) => {
 			if(newUser[field].trim() === ''){
 				submitErrors = {
 					...submitErrors,
-					[field]: `Must not be empty`
+					[field]: `Field cannot be empty`
 				}
 			}
 		})
@@ -68,15 +68,16 @@ const Signup = (props) => {
     }   
 
     return (
-        <section className='absolute w-full h-full'>
+        <section className='absolute w-full h-full mt-10'>
             <div className='container mx-auto px-4 h-full'>
                 <div className='flex content-center items-center justify-center h-full'>
                     <div className='w-full lg:w-6/12 px-4'>
-                        <div className='relative flex flex-wrap min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-300 border-0'>
+                        <div className='relative flex flex-wrap min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blue-400 border-0'>
                             <form className="w-full max-w-lg px-8 pt-8 pb-8 mx-auto mb:4" onSubmit={handleSubmit}>
+                                <p className='text-center text-3xl text-gray-100 leading-8 sm:text-4xl sm:leading-10 font-extrabold mb-10'>Sign Up</p>
                                 <div className="flex flex-wrap -mx-3">
                                     <div className="w-full md:w-1/2 px-3 mb-2">
-                                        <label className="block uppercase text-gray-700 text-sm font-bold mb-2" htmlFor="grid-first-name">
+                                        <label className="block text-gray-100 text-sm font-bold mb-2" htmlFor="grid-first-name">
                                             First Name
                                         </label>
                                         <input 
@@ -89,7 +90,7 @@ const Signup = (props) => {
                                         <p className='text-red-400 mt-1'>{errors.firstName}</p>
                                     </div>
                                     <div className="w-full md:w-1/2 px-3">
-                                        <label className="block uppercase text-gray-700 text-sm font-bold mb-2" htmlFor="grid-last-name">
+                                        <label className="block text-gray-100 text-sm font-bold mb-2" htmlFor="grid-last-name">
                                             Last Name
                                         </label>
                                         <input 
@@ -104,7 +105,7 @@ const Signup = (props) => {
                                 </div>
                                 <div className="flex flex-wrap -mx-3 mb-6">
                                     <div className="w-full px-3 mb-2">
-                                        <label className="block uppercase text-gray-700 text-sm font-bold mb-2" htmlFor="grid-username">
+                                        <label className="block text-gray-100 text-sm font-bold mb-2" htmlFor="grid-username">
                                             Username
                                         </label>
                                         <input 
@@ -117,7 +118,7 @@ const Signup = (props) => {
                                         <p className='text-red-400 mt-1'>{errors.username}</p>
                                     </div>
                                     <div className="w-full px-3 mb-2">
-                                        <label className="block uppercase text-gray-700 text-sm font-bold mb-2" htmlFor="grid-email">
+                                        <label className="block text-gray-100 text-sm font-bold mb-2" htmlFor="grid-email">
                                             Email Address
                                         </label>
                                         <input 
@@ -131,7 +132,7 @@ const Signup = (props) => {
                                         <p className='text-red-400 mt-1'>{errors.email}</p>
                                     </div> 
                                     <div className="w-full px-3 mb-2">
-                                        <label className="block uppercase text-gray-700 text-sm font-bold mb-2" htmlFor="grid-password">
+                                        <label className="block text-gray-100 text-sm font-bold mb-2" htmlFor="grid-password">
                                         Password
                                         </label>
                                         <input 
@@ -144,7 +145,7 @@ const Signup = (props) => {
                                         <p className='text-red-400 mt-1'>{errors.password}</p>
                                     </div>
                                     <div className="w-full px-3 mb-2">
-                                        <label className="block uppercase text-gray-700 text-sm font-bold mb-2" htmlFor="grid-password">
+                                        <label className="block text-gray-100 text-sm font-bold mb-2" htmlFor="grid-password">
                                         Confirm Password
                                         </label>
                                         <input 
@@ -159,12 +160,12 @@ const Signup = (props) => {
                                 </div>
                                 <div className="flex flex-wrap items-center justify-between">
 								<button 
-									className="w-full mb-4 bg-gray-900 active:bg-gray-700 text-white font-bold py-2 px-4 rounded shadow hover:shadow-lg focus:outline-none focus:shadow-outline" 
+									className="w-full mb-4 bg-gray-900 active:bg-gray-100 text-white font-bold py-2 px-4 rounded shadow hover:shadow-lg focus:outline-none focus:shadow-outline" 
                                     type="submit"
 								>
 									Sign Up
 								</button>
-								<Link className="inline-block align-baseline mx-auto font-bold text-sm text-blue-800 hover:text-blue-600" to='/login'>
+								<Link className="inline-block align-baseline mx-auto font-bold text-sm text-gray-100 hover:text-gray-900" to='/login'>
 									Already have an account? Login
 								</Link>
 								</div>

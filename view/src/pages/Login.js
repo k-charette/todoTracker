@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import _ from 'lodash'
 import axios from 'axios';
 
-const Login = (props) => {
+const Login = ({history}) => {
 
 	const [user, setUser] = useState({
 		email: '',
@@ -14,12 +14,12 @@ const Login = (props) => {
 
 	const validForSubmission = () => {
 		let submitErrors = {}
-		const requiredFields = ["password", "email"]
+		const requiredFields = ['password', 'email']
 		requiredFields.forEach(field => {
 			if(user[field].trim() === ''){
 				submitErrors = {
 					...submitErrors,
-					[field]: `${field} required`
+					[field]: `Must enter a valid ${field}`
 				}
 			}
 		})
@@ -49,7 +49,7 @@ const Login = (props) => {
 				setUser({
 					loading: false
 				})
-				props.history.push('/')
+				history.push('/')
 			})
 		} catch(error) {
 				setUser({
@@ -60,16 +60,19 @@ const Login = (props) => {
 		}
 	}
 
+	const { email, password } = errors
+
 	return (
 		<>
 		<section className='absolute w-full h-full'>
 			<div className='container mx-auto px-4 h-full'>
 				<div className='flex content-center items-center justify-center h-full'>
 					<div className="w-full lg:w-4/12 px-4">
-						<div className='relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-gray-300 border-0'>
+						<div className='relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blue-400 border-0'>
 							<form className="px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
+							<p className='text-center text-3xl text-gray-100 leading-8 sm:text-4xl sm:leading-10 font-extrabold mb-10 uppcase'>Login</p>
 								<div className="mb-4">
-								<label className="block uppercase text-gray-700 text-sm font-bold mb-2" htmlFor="email">
+								<label className="block text-gray-100 text-sm font-bold mb-2" htmlFor="email">
 									Email
 								</label>
 								<input 
@@ -80,10 +83,10 @@ const Login = (props) => {
 									placeholder="Email"
 									onChange={handleChange}
 								/>
-								<p className='text-red-400'>{errors.email}</p>
+								<p className='text-red-400'>{email}</p>
 								</div>
 								<div className="mb-6">
-								<label className="block uppercase text-gray-700 text-sm font-bold mb-2" htmlFor="password">
+								<label className="block text-gray-100 text-sm font-bold mb-2" htmlFor="password">
 									Password
 								</label>
 								<input 
@@ -94,16 +97,16 @@ const Login = (props) => {
 									placeholder="Password"
 									onChange={handleChange}
 								/>
-								<p className='text-red-400'>{errors.password}</p>
+								<p className='text-red-400'>{password}</p>
 								</div>
 								<div className="flex flex-wrap items-center justify-between">
 								<button 
-									className="w-full mb-4 bg-gray-900 active:bg-gray-700 text-white font-bold py-2 px-4 rounded shadow hover:shadow-lg focus:outline-none focus:shadow-outline" 
+									className="w-full mb-4 bg-gray-900 active:bg-gray-100 text-white font-bold py-2 px-4 rounded shadow hover:shadow-lg focus:outline-none focus:shadow-outline" 
 									type="submit"
 								>
 									Sign In
 								</button>
-								<Link className="inline-block align-baseline mx-auto font-bold text-sm text-blue-800 hover:text-blue-600" to='/signup'>
+								<Link className="inline-block align-baseline mx-auto font-bold text-sm text-gray-100 hover:text-gray-900" to='/signup'>
 									Don't have an account? Sign Up!
 								</Link>
 								</div>

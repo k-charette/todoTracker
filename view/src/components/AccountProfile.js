@@ -118,7 +118,6 @@ const AccountProfile = ({history, classes, ...rest}) => {
             })
         }
     }
-
     const { firstName, lastName, username } = userInfo
     if (userInfo.uiLoading === true) {
         return (
@@ -133,17 +132,17 @@ const AccountProfile = ({history, classes, ...rest}) => {
         <>
             <Card {...rest} className={clsx(classes.root, classes)}>
                 <CardContent>
-                    <div className='classes.details'>
+                    <div className={classes.details}>
                         <div>
                             <Typography
-                                className='classes.nameText'
+                                className={classes.nameText}
                                 gutterBottom variant='h2'
                             >
                                 {firstName} {lastName} / {username}
                             </Typography>
                             <input className={classes.chooseFile} type='file' onChange={handleImageChange}/>
                             <Button 
-                                className='classes.uploadButton'
+                                className={classes.uploadButton}
                                 color='default'
                                 variant='contained'
                                 type='submit'
@@ -266,10 +265,12 @@ const styles = (theme) => ({
         top: '35%'
     },
     chooseFile: {
-        margin: theme.spacing(2)
+        margin: theme.spacing(2),
+        color: '#4A5568'
     },
     uploadButton: {
-        margin: theme.spacing(1)
+        margin: theme.spacing(1),
+        color: '#4A5568'
     },
     customError: {
         color: 'red',
@@ -278,11 +279,11 @@ const styles = (theme) => ({
     },
     submitButton: {
         marginTop: '10px',
-        backgroundColor: '#039be5'
+        backgroundColor: '#63B3ED'
     },
     details: {
         display: 'flex',
-        marginTop: '100px'
+        color: '#4A5568'
     },
     avatar: {
         marginLeft: 'auto',
@@ -292,7 +293,10 @@ const styles = (theme) => ({
         flexGrow: 0
     },
     nameText: {
-        paddingLeft: '15px'
+        paddingLeft: '15px',    
+    },
+    accountInfo: {
+        color: '#4A5568',
     },
     progress: {
         marginTop: theme.spacing(2)
