@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react'
 import { withStyles } from '@material-ui/core/styles'
 import { AppBar, Button, Card, CardActions, CardContent, CircularProgress, Dialog, DialogContent, DialogContentText, Grid, IconButton, Slide, TextField, Toolbar, Typography, DialogActions } from '@material-ui/core'
-// import MuiDialogTitle from '@material-ui/core/DialogTitle'
-// import MuiDialogContent from '@material-ui/core/DialogContent'
+import MuiDialogTitle from '@material-ui/core/DialogTitle'
+import MuiDialogContent from '@material-ui/core/DialogContent'
 import CloseIcon from '@material-ui/icons/Close'
 import AddCircleIcon from '@material-ui/icons/AddCircle'
 import axios from 'axios'
@@ -17,6 +17,10 @@ const Todo = ({ classes, history }) => {
         body: '',
         todoId: '',
         buttonType: '',
+    })
+
+    const [getCurrentTodos, setCurrentTodos] = useState({
+        todos: []
     })
     
     const [open, setOpen] = useState(false)
@@ -37,10 +41,9 @@ const Todo = ({ classes, history }) => {
         axios.defaults.headers.common = { Authorization: `${authToken}` }
 
         axios.get('/todos').then((response) =>{
-            setTodoInfo({
+            setCurrentTodos({
                 todos: response.data
             })
-
             setUiLoading({
                 uiLoading: false
             })
@@ -60,7 +63,11 @@ const Todo = ({ classes, history }) => {
         setOpen(false)
     }
 
+    const handleSubmit = (event) => {
+        event.preventDefault()
 
+
+    }
     return (
         <main className={classes.content}>
             <div className={classes.toolbar} />
@@ -128,6 +135,16 @@ const Todo = ({ classes, history }) => {
                 </form>
                 </DialogContent>
             </Dialog>
+            <div>
+                {
+                   getCurrentTodos.todos.map((todo) => (
+                        <Typography key={todo.todoId}>
+                            {todo.title}
+                            {todo.body}
+                        </Typography>
+                   ))
+                }
+            </div>
         </main>
     )
 }
@@ -176,6 +193,7 @@ const styles = (theme) => ({
 		marginBottom: 12
 	},
 	uiProgess: {
+        backgroundColor: '#63B3ED',
 		position: 'fixed',
 		zIndex: '1000',
 		height: '31px',

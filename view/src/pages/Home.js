@@ -3,7 +3,7 @@ import axios from 'axios'
 import { authMiddleWare } from '../util/auth'
 import Account from '../components/Account';
 import Todo from '../components/Todo';
-import { Drawer, AppBar, CssBaseline, Toolbar, List, Typography, Divider, ListItem, ListItemIcon, ListItemText, Avatar, CircularProgress } from '@material-ui/core';
+import { Drawer, AppBar, CssBaseline, Toolbar, List, Typography, Divider, ListItem, ListItemIcon, Avatar, CircularProgress } from '@material-ui/core';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import NotesIcon from '@material-ui/icons/Notes';
@@ -68,7 +68,7 @@ const Home = ({history, classes}) => {
 	if (uiLoading === true) {
         return (
             <div className={classes.root}>
-                {uiLoading && <CircularProgress size={150} className={classes.uiProgess} />}
+                {uiLoading && <CircularProgress size={150} className={classes.uiProgress} />}
             </div>
         );
 	} else {
@@ -77,8 +77,8 @@ const Home = ({history, classes}) => {
 			<CssBaseline />
                 <AppBar position="fixed" className={classes.appBar}>
                     <Toolbar>
-                        <Typography variant="h6" noWrap>
-                            Todo Tracker 
+                        <Typography variant="h5" noWrap>
+                            <p className='font-sans tracking-widest'>Todo Tracker </p>
                         </Typography>
                     </Toolbar>
                 </AppBar>
@@ -96,7 +96,7 @@ const Home = ({history, classes}) => {
 							<Avatar src={profilePicture} className={classes.avatar} />
 							<p className={classes.nameText}>
 								{' '}
-								{firstName} {lastName}
+								<p className='font-sans text-xl sm:text-2xl tracking-wider'>{firstName} {lastName}</p>
 							</p>
 						</center>
 						<Divider />
@@ -106,7 +106,7 @@ const Home = ({history, classes}) => {
 									{' '}
 									<NotesIcon />{' '}
 								</ListItemIcon>
-								<ListItemText primary="Todo" />
+                                <p className='font-sans text-xl sm:text-2xl tracking-wider '>Todo </p>
 							</ListItem>
 
 							<ListItem button key="Account" onClick={loadAccountPage}>
@@ -114,14 +114,14 @@ const Home = ({history, classes}) => {
 									{' '}
 									<AccountBoxIcon />{' '}
 								</ListItemIcon>
-								<ListItemText primary="Account" />
+                                <p className='font-sans text-xl sm:text-2xl tracking-wider '>Account </p>
 							</ListItem>
 							<ListItem button key="Logout" onClick={logoutHandler}>
 								<ListItemIcon>
 									{' '}
 									<ExitToAppIcon />{' '}
 								</ListItemIcon>
-								<ListItemText primary="Logout" />
+                                <p className='font-sans text-xl sm:text-2xl tracking-wider '>Logout </p>
 							</ListItem>
 						</List>
 					</Drawer>
@@ -173,7 +173,8 @@ const styles = (theme) => ({
     directoryText: {
         color: '#4A5568'
     },
-	uiProgess: {
+	uiProgress: {
+        color: '#63B3ED',
 		position: 'fixed',
 		zIndex: '1000',
 		height: '31px',

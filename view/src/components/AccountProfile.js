@@ -138,7 +138,7 @@ const AccountProfile = ({history, classes, ...rest}) => {
                                 className={classes.nameText}
                                 gutterBottom variant='h4'
                             >
-                                {firstName} {lastName} / {username}
+                                <p className='font-sans text-3xl sm:text-4xl tracking-wider'>{firstName} {lastName} / {username}</p>
                             </Typography>
                             <input className={classes.chooseFile} type='file' onChange={handleImageChange}/>
                             <Button 
@@ -258,6 +258,7 @@ const styles = (theme) => ({
     },
     toolBar: theme.mixins.toolbar,
     uiProgress: {
+        color: '#63B3ED',
         position: 'fixed',
         zIndex: '1000',
         height: '31px',

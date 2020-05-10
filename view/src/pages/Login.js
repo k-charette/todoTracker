@@ -70,7 +70,7 @@ const Login = ({history}) => {
 					<div className="w-full lg:w-4/12 px-4">
 						<div className='relative flex flex-col min-w-0 break-words w-full mb-6 shadow-lg rounded-lg bg-blue-400 border-0'>
 							<form className="px-8 pt-6 pb-8 mb-4" onSubmit={handleSubmit}>
-							<p className='text-center text-3xl text-gray-100 leading-8 sm:text-4xl sm:leading-10 font-extrabold mb-10 uppcase'>Login</p>
+							<p className='text-center text-3xl text-gray-100 leading-8 sm:text-4xl sm:leading-10 font-extrabold mb-10'>Login</p>
 								<div className="mb-4">
 								<label className="block text-gray-100 text-sm font-bold mb-2" htmlFor="email">
 									Email
