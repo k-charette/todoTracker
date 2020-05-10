@@ -83,7 +83,7 @@ const Login = ({history}) => {
 									placeholder="Email"
 									onChange={handleChange}
 								/>
-								<p className='text-red-400'>{email}</p>
+								<p className='text-red-800'>{email}</p>
 								</div>
 								<div className="mb-6">
 								<label className="block text-gray-100 text-sm font-bold mb-2" htmlFor="password">
@@ -97,7 +97,7 @@ const Login = ({history}) => {
 									placeholder="Password"
 									onChange={handleChange}
 								/>
-								<p className='text-red-400'>{password}</p>
+								<p className='text-red-800'>{password}</p>
 								</div>
 								<div className="flex flex-wrap items-center justify-between">
 								<button 

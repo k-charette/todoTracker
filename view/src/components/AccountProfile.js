@@ -136,7 +136,7 @@ const AccountProfile = ({history, classes, ...rest}) => {
                         <div>
                             <Typography
                                 className={classes.nameText}
-                                gutterBottom variant='h2'
+                                gutterBottom variant='h4'
                             >
                                 {firstName} {lastName} / {username}
                             </Typography>
@@ -180,6 +180,7 @@ const AccountProfile = ({history, classes, ...rest}) => {
                                         margin='dense'
                                         name='firstName'
                                         variant='outlined'
+                                        inputProps={{className: classes.updateField}}
                                         defaultValue={userInfo.firstName}
                                         onChange={handleChange}
                                     >
@@ -192,6 +193,7 @@ const AccountProfile = ({history, classes, ...rest}) => {
                                         margin='dense'
                                         name='lastName'
                                         variant='outlined'
+                                        inputProps={{className: classes.updateField}}
                                         defaultValue={userInfo.lastName}
                                         onChange={handleChange}
                                     >
@@ -225,7 +227,6 @@ const AccountProfile = ({history, classes, ...rest}) => {
                                 </Grid>
                             </Grid>
                         </CardContent>
-                        <Divider/>
                         <CardActions />
                     </form>
                 </Card>
@@ -283,7 +284,12 @@ const styles = (theme) => ({
     },
     details: {
         display: 'flex',
-        color: '#4A5568'
+        color: '#4A5568',
+        margin: 'auto',
+        justifyContent: 'center'
+    },
+    updateField: {
+        color: '#4A5568',
     },
     avatar: {
         marginLeft: 'auto',

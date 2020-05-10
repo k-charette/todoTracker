@@ -87,7 +87,7 @@ const Signup = (props) => {
                                             placeholder="First Name"
                                             onChange={handleChange}
                                         />
-                                        <p className='text-red-400 mt-1'>{errors.firstName}</p>
+                                        <p className='text-red-800 mt-1'>{errors.firstName}</p>
                                     </div>
                                     <div className="w-full md:w-1/2 px-3">
                                         <label className="block text-gray-100 text-sm font-bold mb-2" htmlFor="grid-last-name">
@@ -100,7 +100,7 @@ const Signup = (props) => {
                                             placeholder="Last Name"
                                             onChange={handleChange}
                                             />
-                                        <p className='text-red-400 mt-1'>{errors.lastName}</p>
+                                        <p className='text-red-800 mt-1'>{errors.lastName}</p>
                                     </div>
                                 </div>
                                 <div className="flex flex-wrap -mx-3 mb-6">
@@ -115,7 +115,7 @@ const Signup = (props) => {
                                             placeholder="Username"
                                             onChange={handleChange}
                                         />
-                                        <p className='text-red-400 mt-1'>{errors.username}</p>
+                                        <p className='text-red-800 mt-1'>{errors.username}</p>
                                     </div>
                                     <div className="w-full px-3 mb-2">
                                         <label className="block text-gray-100 text-sm font-bold mb-2" htmlFor="grid-email">
@@ -129,7 +129,7 @@ const Signup = (props) => {
                                             placeholder="Email Address"
                                             onChange={handleChange}
                                         />
-                                        <p className='text-red-400 mt-1'>{errors.email}</p>
+                                        <p className='text-red-800 mt-1'>{errors.email}</p>
                                     </div> 
                                     <div className="w-full px-3 mb-2">
                                         <label className="block text-gray-100 text-sm font-bold mb-2" htmlFor="grid-password">
@@ -142,7 +142,7 @@ const Signup = (props) => {
                                             placeholder="Password"
                                             onChange={handleChange}
                                         />
-                                        <p className='text-red-400 mt-1'>{errors.password}</p>
+                                        <p className='text-red-800 mt-1'>{errors.password}</p>
                                     </div>
                                     <div className="w-full px-3 mb-2">
                                         <label className="block text-gray-100 text-sm font-bold mb-2" htmlFor="grid-password">
@@ -155,7 +155,7 @@ const Signup = (props) => {
                                             placeholder="Confirm Password"
                                             onChange={handleChange}
                                         />
-                                        <p className='text-red-400 mt-1'>{errors.confirmPassword}</p>
+                                        <p className='text-red-800 mt-1'>{errors.confirmPassword}</p>
                                     </div>
                                 </div>
                                 <div className="flex flex-wrap items-center justify-between">

@@ -94,7 +94,7 @@ const Todo = ({ classes, history }) => {
                 </AppBar>
                 <DialogContent style={{marginTop: '100px'}}>
                 <form className={classes.form}>
-                <TextField
+                    <TextField
                         variant='outlined'
                         required
                         fullWidth
@@ -104,7 +104,7 @@ const Todo = ({ classes, history }) => {
                         label='Add a title...'
                         name='title'
                         autoComplete='todoTitle'
-                        helperText={errors.title}
+                        helperText='* Required Field'
                         onChange={handleChange}
                         defaultValue={todoInfo.title}
                     />
@@ -115,9 +115,10 @@ const Todo = ({ classes, history }) => {
                         autoFocus
                         margin='dense'
                         id='todoBody'
-                        label='What do you need to get done...?'
+                        label='What do you want to get done?'
                         name='body'
                         autoComplete='todoBody' 
+                        helperText='* Required Field'
                         multiline
                         rows={10}
                         rowsMax={10} 
@@ -137,7 +138,6 @@ const styles = (theme) => ({
         margin: 'auto',
         padding: theme.spacing(3)
     },
-    
     title: {
 		marginLeft: theme.spacing(2),
 		flex: 1
@@ -145,7 +145,6 @@ const styles = (theme) => ({
     appBar: {
         backgroundColor: '#63B3ED',
     },
-
 	submitButton: {
 		display: 'block',
 		color: 'white',
