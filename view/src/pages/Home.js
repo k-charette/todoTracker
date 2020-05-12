@@ -1,13 +1,17 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import axios from 'axios'
 import { authMiddleWare } from '../util/auth'
 import Account from '../components/Account';
 import Todo from '../components/Todo';
 import { Drawer, AppBar, CssBaseline, Toolbar, List, Typography, Divider, ListItem, ListItemIcon, Avatar, CircularProgress } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import AccountBoxIcon from '@material-ui/icons/AccountBox';
 import NotesIcon from '@material-ui/icons/Notes';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft'
 import withStyles from '@material-ui/core/styles/withStyles';
+import clsx from 'clsx'
 
 const Home = ({history, classes}) => {
     const [loadPage, setLoadPage] = useState({
@@ -21,24 +25,35 @@ const Home = ({history, classes}) => {
         uiLoading: true,
         imageLoading: false
     })
+
+    const [open, setOpen] = useState(true)
+
+    const handleDrawerOpen = () => {
+        setOpen(true)
+    }
+
+    const handleDrawerClose = () => {
+        setOpen(false)
+    }
     
-    const loadAccountPage = (event) => {
+    const loadAccountPage = () => {
         setLoadPage({
             render: false
         })
     }
 
-    const loadTodoPage = (event) => {
+    const loadTodoPage = () => {
         setLoadPage({
             render: true
         })
     }
 
-    const logoutHandler = (event) => {
+    const logoutHandler = () => {
         localStorage.removeItem('AuthToken')
         history.push('/login')
     }
 
+    const _isMounted = useRef(true)
     useEffect(() => {
         authMiddleWare(history)
         const authToken = localStorage.getItem('AuthToken')
@@ -61,9 +76,11 @@ const Home = ({history, classes}) => {
             console.log(error)
             setAuthUser({ errorMsg: 'Error in getting the data' })
         })
+
+        return () => _isMounted.current = false
     }, [history])
 
-    const { firstName, lastName, profilePicture, uiLoading } = authUser
+    const { firstName, lastName, uiLoading } = authUser
 
 	if (uiLoading === true) {
         return (
@@ -75,31 +92,36 @@ const Home = ({history, classes}) => {
     return(
         <div className={classes.root}>
 			<CssBaseline />
-                <AppBar position="fixed" className={classes.appBar}>
-                    <Toolbar>
-                        <Typography variant="h5" noWrap>
+                <AppBar position="absolute" className={clsx(classes.appBar, open  && classes.appBarShift)}>
+                    <Toolbar className={classes.toolbar}>
+                        <IconButton
+                            edge='start'
+                            color='inherit'
+                            aria-label='open drawer'
+                            onClick={handleDrawerOpen}
+                            className={clsx(classes.menuButton), open && classes.menuButtonHidden}
+                        >
+                            <MenuIcon />
+                        </IconButton>
+                        <Typography className={classes.title} variant="h5" noWrap>
                             <p className='font-sans tracking-widest'>Todo Tracker </p>
                         </Typography>
                     </Toolbar>
                 </AppBar>
 					<Drawer
-                        anchor='left'
 						className={classes.drawer}
 						variant="permanent"
 						classes={{
-							paper: classes.drawerPaper
-						}}
+							paper: clsx(classes.drawerPaper, !open && classes.drawerPaperClose)
+                        }}
+                        open={open}
 					>
+                        <div className={classes.toolBarIcon}>
+                            <IconButton onClick={handleDrawerClose}>
+                                <ChevronLeftIcon />
+                            </IconButton>
+                        </div>
 						<div className={classes.toolbar} />
-						<Divider />
-						<center>
-							<Avatar src={profilePicture} className={classes.avatar} />
-							<p className={classes.nameText}>
-								{' '}
-								<p className='font-sans text-xl sm:text-2xl tracking-wider'>{firstName} {lastName}</p>
-							</p>
-						</center>
-						<Divider />
 						<List className={classes.directoryText}>
 							<ListItem button key="Todo" onClick={loadTodoPage}>
 								<ListItemIcon>
@@ -138,7 +160,6 @@ const drawerWidth = 240
 const styles = (theme) => ({
 	root: {
         display: 'flex',
-        flexWrap: 'wrap'
     },
     content: {
         flexGrow: 1,
@@ -147,9 +168,39 @@ const styles = (theme) => ({
     },
 	appBar: {
         zIndex: theme.zIndex.drawer + 1,
-        position: 'fixed',
-        backgroundColor: '#63B3ED'
-	},
+        backgroundColor: '#63B3ED',
+        transition: theme.transitions.create(['width', 'margin'],{
+           easing: theme.transitions.easing.sharp,
+           duration: theme.transitions.duration.leavingScreen, 
+        }),
+    },
+    appBarShift: {
+        marginLeft: drawerWidth,
+        width: `calc(100% - ${drawerWidth}px)`,
+        transition: theme.transitions.create(['width', 'margin'],{
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen, 
+         }),
+    },
+    menuButton: {
+        marginRight: 36,
+    },
+    menuButtonHidden: {
+        display: 'none',
+    },
+    toolBarIcon: {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'flex-end',
+        padding: '0 8px',
+        ...theme.mixins.toolbar,
+    },
+    toolbar: {
+        paddingRight: 24,
+    },
+    title: {
+        flexGrow: 1,
+    },
 	drawer: {
 		width: drawerWidth,
         flexShrink: 0,
@@ -157,8 +208,25 @@ const styles = (theme) => ({
 	},
 	drawerPaper: {
         width: drawerWidth,
-        backgroundColor: '#f5f5f5'
-	},
+        position: 'relative',
+        backgroundColor: '#f5f5f5',
+        whiteSpace: 'nowrap',
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.enteringScreen,
+        })
+    },
+    drawerPaperClose: {
+        overflowX: 'hidden',
+        transition: theme.transitions.create('width', {
+            easing: theme.transitions.easing.sharp,
+            duration: theme.transitions.duration.leavingScreen,
+        }),
+        width: theme.spacing(7),
+        [theme.breakpoints.up('sm')]: {
+            width: theme.spacing(9)
+        },
+    },
 	avatar: {
 		height: 110,
 		width: 100,

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import withStyles from '@material-ui/core/styles/withStyles'
-import { CircularProgress, Card, CardActions, CardContent, Divider, Button, Grid, TextField, Typography } from '@material-ui/core'
+import { Avatar, CircularProgress, Card, CardActions, CardContent, Divider, Button, Grid, TextField, Typography } from '@material-ui/core'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload'
 import clsx from 'clsx'
 import axios from 'axios'
@@ -19,7 +19,7 @@ const AccountProfile = ({history, classes, ...rest}) => {
     })
 
     const [profilePicture, setProfilePicture] = useState({
-        profilePicture: '',
+        avatar: '',
     })
 
     useEffect(() => {
@@ -34,6 +34,9 @@ const AccountProfile = ({history, classes, ...rest}) => {
                 email: response.data.userCredentials.email,
                 username: response.data.userCredentials.username,
                 uiLoading: false
+            })
+            setProfilePicture({
+                avatar: response.data.userCredentials.imageUrl
             })
         })
         .catch((error) => {
@@ -119,6 +122,8 @@ const AccountProfile = ({history, classes, ...rest}) => {
         }
     }
     const { firstName, lastName, username } = userInfo
+
+    const { avatar } = profilePicture
     if (userInfo.uiLoading === true) {
         return (
             <div className={classes.content}>
@@ -134,11 +139,12 @@ const AccountProfile = ({history, classes, ...rest}) => {
                 <CardContent>
                     <div className={classes.details}>
                         <div>
+                            <Avatar src={avatar} className={classes.avatar} />
                             <Typography
                                 className={classes.nameText}
                                 gutterBottom variant='h4'
                             >
-                                <p className='font-sans text-3xl sm:text-4xl tracking-wider'>{firstName} {lastName} / {username}</p>
+                                <p className='font-sans text-2xl sm:text-3xl tracking-wider'>{firstName} {lastName} / {username}</p>
                             </Typography>
                             <input className={classes.chooseFile} type='file' onChange={handleImageChange}/>
                             <Button 
@@ -253,7 +259,8 @@ const AccountProfile = ({history, classes, ...rest}) => {
 const styles = (theme) => ({
     root: {},
     content: {
-        flexGrow: 1,
+        // flexGrow: 1,
+        justifyContent: 'center',
         margin: 'auto',
     },
     toolBar: theme.mixins.toolbar,
@@ -293,11 +300,12 @@ const styles = (theme) => ({
         color: '#4A5568',
     },
     avatar: {
-        marginLeft: 'auto',
-        height: 110,
-        width: 100,
-        flexShrink: 0,
-        flexGrow: 0
+		height: 110,
+		width: 100,
+		flexShrink: 0,
+        flexGrow: 0,
+        marginTop: 20,
+        marginBottom: 20
     },
     nameText: {
         paddingLeft: '15px',    

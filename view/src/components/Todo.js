@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { AppBar, Button, Card, CardActions, CardContent, CircularProgress, Dialog, DialogContent, DialogContentText, Grid, IconButton, Slide, TextField, Toolbar, Typography, DialogActions } from '@material-ui/core'
+import { AppBar, Button, Card, CardActions, CardContent, CircularProgress, Container, Dialog, DialogContent, DialogTitle, DialogContentText, Grid, IconButton, Slide, TextField, Toolbar, Typography, DialogActions } from '@material-ui/core'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import CloseIcon from '@material-ui/icons/Close'
@@ -10,19 +10,19 @@ import dayjs from 'dayjs'
 import relativeTime from 'dayjs/plugin/relativeTime'
 import { authMiddleWare } from '../util/auth'
 
-const Todo = ({ classes, history }) => {
+const Todo = ({ classes, history, children, onClose }) => {
     const [todoInfo, setTodoInfo] = useState({
         todos: '',
         title: '',
         body: '',
         todoId: '',
-        buttonType: '',
     })
 
     const [getCurrentTodos, setCurrentTodos] = useState({
         todos: []
     })
     
+    const [buttonType, setButtonType] = useState('')
     const [open, setOpen] = useState(false)
     const [viewOpen, setViewOpen] = useState(false)
     const [uiLoading, setUiLoading] = useState(true)
@@ -46,7 +46,7 @@ const Todo = ({ classes, history }) => {
             })
             setUiLoading({
                 uiLoading: false
-            })
+            })      
         })
         .catch((err) => {
             console.log(err)
@@ -65,9 +65,86 @@ const Todo = ({ classes, history }) => {
 
     const handleSubmit = (event) => {
         event.preventDefault()
-
+        authMiddleWare(history)
+        const userTodo = {
+            title: todoInfo.title,
+            body: todoInfo.body
+        }
+        let options = {}
+        if(buttonType === 'Edit') {
+            options = {
+                url: `/todo/${todoInfo.todoId}`,
+                method: 'put',
+                data: userTodo
+            }
+        } else {
+            options = {
+                url: '/todo',
+                method: 'post',
+                data: userTodo
+            }
+        }
+        const authToken = localStorage.getItem('AuthToken')
+        console.log(authToken)
+        axios.defaults.headers.common = { Authorization: `${authToken}`}
+        axios(options).then(() => {
+            setOpen(false)
+            window.location.reload()
+        })
+        .catch((error) => {
+            setOpen({ open: true, errors: error.response.data })
+            console.log(error)
+        })
 
     }
+
+    const handleViewOpen = (data) => {
+        setTodoInfo({
+            title: data.todo.title,
+            body: data.todo.body
+        })
+
+        setViewOpen(true)
+    }
+
+    const handleViewClose = () => {
+        setViewOpen(false)
+    }
+
+    const handleEditOpen = (data) => {
+        setTodoInfo({
+            title: data.todo.title,
+            body: data.todo.body,
+            todoId: data.todo.todoId,
+        })
+        setButtonType('Edit')
+        setOpen(true)
+    }
+
+    // const DialogTitle = withStyles(styles)((props) => {
+    //     const { ...other } = props
+    //     return (
+    //         <MuiDialogTitle disableTypography className={classes.root} {...other}>
+    //              <Typography varian='h6'>{children}</Typography>
+    //              {
+    //                  onClose ? (
+    //                     <IconButton aria-label='close' className={classes.closeButton} onClock={onClose}>
+    //                         <CloseIcon/>
+    //                     </IconButton>
+    //                 ) : null
+    //              }
+    //         </MuiDialogTitle>
+    //     )
+    // })
+
+    // const DialogContent = withStyles((theme) => ({
+    //     viewRoot: {
+    //         padding: theme.spacing(2)
+    //     }
+    // }))(MuiDialogContent)
+
+    dayjs.extend(relativeTime)
+
     return (
         <main className={classes.content}>
             <div className={classes.toolbar} />
@@ -87,15 +164,15 @@ const Todo = ({ classes, history }) => {
                             <CloseIcon />
                         </IconButton>
                         <Typography varian='h6' className={classes.title}>
-                            {todoInfo.buttonType === 'Edit' ? 'Edit Todo' : 'Create New Todo' }
+                            { buttonType === 'Edit' ? 'Edit Todo' : 'Create New Todo' }
                         </Typography>
                         <Button
                             autoFocus
                             color='inherit'
-                            // onClick={handleSubmit}
+                            onClick={handleSubmit}
                             className={classes.submitButton}
                         >
-                            {todoInfo.buttonType === 'Edit' ? 'Save' : 'Submit'}
+                            { buttonType === 'Edit' ? 'Save' : 'Submit'}
                         </Button>
                     </Toolbar>
                 </AppBar>
@@ -113,7 +190,6 @@ const Todo = ({ classes, history }) => {
                         autoComplete='todoTitle'
                         helperText='* Required Field'
                         onChange={handleChange}
-                        defaultValue={todoInfo.title}
                     />
                     <TextField
                         variant='outlined'
@@ -130,20 +206,73 @@ const Todo = ({ classes, history }) => {
                         rows={10}
                         rowsMax={10} 
                         onChange={handleChange}
-                        defaultValue={todoInfo.body}
                     />
                 </form>
                 </DialogContent>
             </Dialog>
             <div>
+            <Container maxWidth='lg' className={classes.container}>
+            <Grid container spacing={2}>
                 {
                    getCurrentTodos.todos.map((todo) => (
-                        <Typography key={todo.todoId}>
-                            {todo.title}
-                            {todo.body}
-                        </Typography>
-                   ))
-                }
+                       <Grid item xs={12} sm={6}>
+                           <Card className={classes.root} variant='outlined'>
+                               <CardContent>
+                                    <Typography key={todo.todoId} variant='h5' component='h2'>
+                                        {todo.title}
+                                    </Typography>
+                                    <Typography className={classes.pos} color='textSecondary'>
+                                    {dayjs(todo.createdAt).fromNow()}
+                                    </Typography>
+                                    <Typography variant='body2' component='p'>
+                                        {`${todo.body.substring(0, 65)}`}
+                                    </Typography>
+                                </CardContent>
+                                <CardActions>
+                                    <Button size='small' color='primary' onClick={() => handleViewOpen({ todo })} >
+                                        {' '}
+                                        View{' '}
+                                    </Button>
+                                    <Button size='small' color='primary' onClick={() => handleEditOpen({ todo })}>
+                                        {' '}
+                                        Edit{' '}
+                                    </Button>
+                                    <Button size='small' color='primary' >
+                                        {' '}
+                                        Delete{' '}
+                                    </Button>
+                                </CardActions>
+                            </Card>
+                        </Grid>
+                    ))}
+                </Grid>
+                         <Dialog
+                            onClose={handleViewClose}
+                            aria-labelledby='customized-dialog-title'
+                            open={viewOpen}
+                            fullWidth
+                            classes={{ paperFullWidth: classes.dialogStyle }}
+                        >
+                            <DialogTitle id='customized-dialog-title' onClose={handleViewClose}>
+                                {todoInfo.title}
+                            </DialogTitle>
+                            <DialogContent>
+                                <TextField
+                                    fullWidth
+                                    id='todoDetails'
+                                    name='body'
+                                    multiline
+                                    readonly
+                                    rows={1}
+                                    rowsMaxs={10}
+                                    value={todoInfo.body}
+                                    InputProps={{
+                                        disableUnderline: true
+                                    }}
+                                />
+                            </DialogContent>
+                        </Dialog>
+                    </Container>
             </div>
         </main>
     )
@@ -152,8 +281,14 @@ const Todo = ({ classes, history }) => {
 const styles = (theme) => ({
     content: {
         flexGrow: 1,
+        overflow: 'auto',
+        height: '100vh',
         margin: 'auto',
         padding: theme.spacing(3)
+    },
+    container: {
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(4),
     },
     title: {
 		marginLeft: theme.spacing(2),
@@ -182,7 +317,7 @@ const styles = (theme) => ({
     },
     toolbar: theme.mixins.toolbar,
 	root: {
-		minWidth: 470
+        minWidth: 470,
     },    
 	bullet: {
 		display: 'inline-block',

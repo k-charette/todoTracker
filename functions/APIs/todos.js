@@ -72,9 +72,6 @@ exports.editTodo = ( request, response ) => {
         response.status(403).json({message: 'Not allowed to edit'})
     }
     let document = db.collection('todos').doc(`${request.params.todoId}`)
-    // TO CHECK -> currently at document.update(request.body) 
-    // BUT giving an error "Update() requires either a single JavaScript object or an alternating list of field/value pairs
-    //that can be followed by an optional precondition."
     document.update(request.body).then(()=> {
         response.json({message: 'Updated successfully'})
     })
