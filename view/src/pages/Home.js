@@ -3,7 +3,7 @@ import axios from 'axios'
 import { authMiddleWare } from '../util/auth'
 import Account from '../components/Account';
 import Todo from '../components/Todo';
-import { Drawer, AppBar, CssBaseline, Toolbar, List, Typography, Divider, ListItem, ListItemIcon, Avatar, CircularProgress } from '@material-ui/core';
+import { Drawer, AppBar, Container, Grid, Paper, CssBaseline, Toolbar, List, Typography, Divider, ListItem, ListItemIcon, CircularProgress } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -14,9 +14,6 @@ import withStyles from '@material-ui/core/styles/withStyles';
 import clsx from 'clsx'
 
 const Home = ({history, classes}) => {
-    const [loadPage, setLoadPage] = useState({
-        render: false
-    })
 
     const [authUser, setAuthUser] = useState({
         firstName: '',
@@ -28,6 +25,10 @@ const Home = ({history, classes}) => {
 
     const [open, setOpen] = useState(true)
 
+    const [loadPage, setLoadPage] = useState({
+        render: false
+    })
+
     const handleDrawerOpen = () => {
         setOpen(true)
     }
@@ -38,13 +39,13 @@ const Home = ({history, classes}) => {
     
     const loadAccountPage = () => {
         setLoadPage({
-            render: false
+            render: true
         })
     }
 
     const loadTodoPage = () => {
         setLoadPage({
-            render: true
+            render: false
         })
     }
 
@@ -80,7 +81,9 @@ const Home = ({history, classes}) => {
         return () => _isMounted.current = false
     }, [history])
 
-    const { firstName, lastName, uiLoading } = authUser
+    const { uiLoading } = authUser
+
+    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
 
 	if (uiLoading === true) {
         return (
@@ -99,7 +102,7 @@ const Home = ({history, classes}) => {
                             color='inherit'
                             aria-label='open drawer'
                             onClick={handleDrawerOpen}
-                            className={clsx(classes.menuButton), open && classes.menuButtonHidden}
+                            className={clsx(classes.menuButton, open && classes.menuButtonHidden)}
                         >
                             <MenuIcon />
                         </IconButton>
@@ -121,7 +124,7 @@ const Home = ({history, classes}) => {
                                 <ChevronLeftIcon />
                             </IconButton>
                         </div>
-						<div className={classes.toolbar} />
+                        <Divider />
 						<List className={classes.directoryText}>
 							<ListItem button key="Todo" onClick={loadTodoPage}>
 								<ListItemIcon>
@@ -149,7 +152,13 @@ const Home = ({history, classes}) => {
 					</Drawer>
 			<div className={classes.content}>
                 <div className={classes.toolbar}/>
-                    {loadPage.render ? <Todo /> : <Account /> }
+                <Container fixed className={classes.container}>
+                    <Grid>
+                        <Paper className={fixedHeightPaper}>
+                            {loadPage.render ? <Account /> : <Todo /> }
+                        </Paper>
+                    </Grid>
+                </Container>
             </div>
 		</div>
     )
@@ -163,8 +172,20 @@ const styles = (theme) => ({
     },
     content: {
         flexGrow: 1,
+        flexWrap: 'wrap',
+        height: '100vh',
         padding: theme.spacing(3),
-        margin: 'auto'
+        overflow: 'auto',
+    },
+    container: {
+        paddingTop: theme.spacing(4),
+        paddingBottom: theme.spacing(4)
+    },
+    paper: {
+        padding:theme.spacing(2),
+        display: 'flex',
+        overflow: 'auto',
+        flexDirection: 'column',
     },
 	appBar: {
         zIndex: theme.zIndex.drawer + 1,
@@ -195,9 +216,6 @@ const styles = (theme) => ({
         padding: '0 8px',
         ...theme.mixins.toolbar,
     },
-    toolbar: {
-        paddingRight: 24,
-    },
     title: {
         flexGrow: 1,
     },
@@ -226,14 +244,6 @@ const styles = (theme) => ({
         [theme.breakpoints.up('sm')]: {
             width: theme.spacing(9)
         },
-    },
-	avatar: {
-		height: 110,
-		width: 100,
-		flexShrink: 0,
-        flexGrow: 0,
-        marginTop: 20,
-        marginBottom: 20
     },
     nameText: {
         color: '#4A5568'

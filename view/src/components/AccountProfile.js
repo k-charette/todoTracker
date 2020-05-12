@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
 import withStyles from '@material-ui/core/styles/withStyles'
-import { Avatar, CircularProgress, Card, CardActions, CardContent, Divider, Button, Grid, TextField, Typography } from '@material-ui/core'
+import { Avatar, CircularProgress, Divider, Button, Grid, TextField, Typography } from '@material-ui/core'
 import CloudUploadIcon from '@material-ui/icons/CloudUpload'
-import clsx from 'clsx'
 import axios from 'axios'
 import { authMiddleWare } from '../util/auth'
 
-const AccountProfile = ({history, classes, ...rest}) => {
+const AccountProfile = ({ history, classes }) => {
+    
     const [userInfo, setUserInfo] = useState({
         firstName: '',
         lastName: '',
@@ -135,122 +135,112 @@ const AccountProfile = ({history, classes, ...rest}) => {
     
     return (
         <>
-            <Card {...rest} className={clsx(classes.root, classes)}>
-                <CardContent>
-                    <div className={classes.details}>
-                        <div>
-                            <Avatar src={avatar} className={classes.avatar} />
-                            <Typography
-                                className={classes.nameText}
-                                gutterBottom variant='h4'
-                            >
-                                <p className='font-sans text-2xl sm:text-3xl tracking-wider'>{firstName} {lastName} / {username}</p>
-                            </Typography>
-                            <input className={classes.chooseFile} type='file' onChange={handleImageChange}/>
-                            <Button 
-                                className={classes.uploadButton}
-                                color='default'
-                                variant='contained'
-                                type='submit'
-                                startIcon={<CloudUploadIcon/>}
-                                size='small'
-                                onClick={profilePictureHandler}
-                            >
-                                Upload Photo
-                            </Button>
-                            
-                            {userInfo.imageError ? (
-                                <div className={classes.customError}>
-                                    {' '}
-                                    {`Wrong Image Format` && `Supported Format are PNG and JPG`}
-                                </div>
-                            ) : (
-                                false
-                            )}
-                        </div>
+        <div className={classes.details}>
+            <div>
+                <Avatar src={avatar} className={classes.avatar} />
+                <Typography
+                    className={classes.nameText}
+                    gutterBottom variant='h4'
+                >
+                    <p className='font-sans text-2xl sm:text-3xl tracking-wider'>{firstName} {lastName} / {username}</p>
+                </Typography>
+                <input className={classes.chooseFile} type='file' onChange={handleImageChange}/>
+                <Button 
+                    className={classes.uploadButton}
+                    color='default'
+                    variant='contained'
+                    type='submit'
+                    startIcon={<CloudUploadIcon/>}
+                    size='small'
+                    onClick={profilePictureHandler}
+                >
+                    Upload Photo
+                </Button>
+                
+                {userInfo.imageError ? (
+                    <div className={classes.customError}>
+                        {' '}
+                        {`Wrong Image Format` && `Supported Format are PNG and JPG`}
                     </div>
-                    <div className={classes.progress} />
-                </CardContent>
+                ) : (
+                    false
+                )}
+            </div>
+        </div>
+        <div className={classes.progress} />
                 <Divider/>
-            </Card>
             <br/>
-            <Card {...rest} className={clsx(classes.root, classes)}>
-                    <form autoComplete='off'>
-                        <Divider/>
-                        <CardContent>
-                            <Grid container spacing={3} >
-                                <Grid item md={6} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        label='Update First Name'
-                                        margin='dense'
-                                        name='firstName'
-                                        variant='outlined'
-                                        inputProps={{className: classes.updateField}}
-                                        defaultValue={userInfo.firstName}
-                                        onChange={handleChange}
-                                    >
-                                    </TextField>
-                                </Grid>
-                                <Grid item md={6} xs={12}>
-                                    <TextField
-                                        fullWidth
-                                        label='Update Last Name'
-                                        margin='dense'
-                                        name='lastName'
-                                        variant='outlined'
-                                        inputProps={{className: classes.updateField}}
-                                        defaultValue={userInfo.lastName}
-                                        onChange={handleChange}
-                                    >
-                                    </TextField>
-                                </Grid>
-                                <Grid item md={6} xs={12}>
-                                    <TextField
-                                        disabled
-                                        fullWidth
-                                        label='Email'
-                                        margin='dense'
-                                        name='email'
-                                        variant='outlined'
-                                        defaultValue={userInfo.email}
-                                        onChange={handleChange}
-                                    >
-                                    </TextField>
-                                </Grid>
-                                <Grid item md={6} xs={12}>
-                                    <TextField
-                                        disabled
-                                        fullWidth
-                                        label='Username'
-                                        margin='dense'
-                                        name='username'
-                                        variant='outlined'
-                                        defaultValue={userInfo.username}
-                                        onChange={handleChange}
-                                    >
-                                    </TextField>
-                                </Grid>
-                            </Grid>
-                        </CardContent>
-                        <CardActions />
-                    </form>
-                </Card>
-                    <Button
-                        color='primary'
-                        variant='contained'
-                        type='submit'
-                        className={classes.submitButton}
-                        onClick={updateFormValues}
-                        disabled={
-                            userInfo.buttonLoading ||
-                            !userInfo.firstName ||
-                            !userInfo.lastName 
-                        }
+            <form autoComplete='off'>
+                <Grid container spacing={3} >
+                    <Grid item md={6} xs={12}>
+                        <TextField
+                            fullWidth
+                            label='Update First Name'
+                            margin='dense'
+                            name='firstName'
+                            variant='outlined'
+                            inputProps={{className: classes.updateField}}
+                            defaultValue={userInfo.firstName}
+                            onChange={handleChange}
                         >
-                        Save Details
-                        {userInfo.buttonLoading && <CircularProgress size={30} className={classes.progress}/>}
-                    </Button>
+                        </TextField>
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                        <TextField
+                            fullWidth
+                            label='Update Last Name'
+                            margin='dense'
+                            name='lastName'
+                            variant='outlined'
+                            inputProps={{className: classes.updateField}}
+                            defaultValue={userInfo.lastName}
+                            onChange={handleChange}
+                        >
+                        </TextField>
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                        <TextField
+                            disabled
+                            fullWidth
+                            label='Email'
+                            margin='dense'
+                            name='email'
+                            variant='outlined'
+                            defaultValue={userInfo.email}
+                            onChange={handleChange}
+                        >
+                        </TextField>
+                    </Grid>
+                    <Grid item md={6} xs={12}>
+                        <TextField
+                            disabled
+                            fullWidth
+                            label='Username'
+                            margin='dense'
+                            name='username'
+                            variant='outlined'
+                            defaultValue={userInfo.username}
+                            onChange={handleChange}
+                        >
+                        </TextField>
+                    </Grid>
+                </Grid>
+            </form>
+                <Button
+                    color='primary'
+                    variant='contained'
+                    type='submit'
+                    className={classes.submitButton}
+                    onClick={updateFormValues}
+                    disabled={
+                        userInfo.buttonLoading ||
+                        !userInfo.firstName ||
+                        !userInfo.lastName 
+                    }
+                    >
+                    Save Details
+                    {userInfo.buttonLoading && <CircularProgress size={30} className={classes.progress}/>}
+                </Button>
         </>
     )
     }
@@ -259,7 +249,7 @@ const AccountProfile = ({history, classes, ...rest}) => {
 const styles = (theme) => ({
     root: {},
     content: {
-        // flexGrow: 1,
+        flexGrow: 1,
         justifyContent: 'center',
         margin: 'auto',
     },
@@ -305,7 +295,8 @@ const styles = (theme) => ({
 		flexShrink: 0,
         flexGrow: 0,
         marginTop: 20,
-        marginBottom: 20
+        marginBottom: 20,
+        margin: 'auto'
     },
     nameText: {
         paddingLeft: '15px',    

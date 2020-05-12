@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { withStyles } from '@material-ui/core/styles'
-import { AppBar, Button, Card, CardActions, CardContent, CircularProgress, Container, Dialog, DialogContent, DialogTitle, DialogContentText, Grid, IconButton, Slide, TextField, Toolbar, Typography, DialogActions } from '@material-ui/core'
+import { AppBar, Button, Card, CardActions, CardContent, CircularProgress, Container, Dialog, DialogContent, DialogTitle, DialogContentText, Grid, IconButton, TextField, Toolbar, Typography, DialogActions } from '@material-ui/core'
 import MuiDialogTitle from '@material-ui/core/DialogTitle'
 import MuiDialogContent from '@material-ui/core/DialogContent'
 import CloseIcon from '@material-ui/icons/Close'
@@ -103,7 +103,6 @@ const Todo = ({ classes, history, children, onClose }) => {
             title: data.todo.title,
             body: data.todo.body
         })
-
         setViewOpen(true)
     }
 
@@ -112,6 +111,7 @@ const Todo = ({ classes, history, children, onClose }) => {
     }
 
     const handleEditOpen = (data) => {
+        console.log(data)
         setTodoInfo({
             title: data.todo.title,
             body: data.todo.body,
@@ -190,6 +190,7 @@ const Todo = ({ classes, history, children, onClose }) => {
                         autoComplete='todoTitle'
                         helperText='* Required Field'
                         onChange={handleChange}
+                        value={todoInfo.title}
                     />
                     <TextField
                         variant='outlined'
@@ -206,6 +207,7 @@ const Todo = ({ classes, history, children, onClose }) => {
                         rows={10}
                         rowsMax={10} 
                         onChange={handleChange}
+                        value={todoInfo.body}
                     />
                 </form>
                 </DialogContent>
@@ -262,9 +264,9 @@ const Todo = ({ classes, history, children, onClose }) => {
                                     id='todoDetails'
                                     name='body'
                                     multiline
-                                    readonly
+                                    readOnly
                                     rows={1}
-                                    rowsMaxs={10}
+                                    rowsMax={10}
                                     value={todoInfo.body}
                                     InputProps={{
                                         disableUnderline: true
