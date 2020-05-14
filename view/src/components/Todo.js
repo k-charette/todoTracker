@@ -127,9 +127,7 @@ const Todo = ({ classes, history, children, onClose }) => {
         setButtonType('Edit')
         setOpen(true)
     }
-
-    console.log(buttonType)
-
+    
     const deleteTodoHandler = (data) => {
         authMiddleWare(history)
         const authToken = localStorage.getItem('AuthToken')
@@ -170,9 +168,8 @@ const Todo = ({ classes, history, children, onClose }) => {
 
     return (
         <main className={classes.content}>
-            <div className={classes.toolbar} />
             <IconButton className={classes.floatingButton} aria-label='Add Todo' color='primary' onClick={handleClickOpen}>
-                <AddCircleIcon style={{ fontSize: 60}} />
+                <AddCircleIcon style={{ fontSize: 60 }} />
             </IconButton>
             <Dialog
                 fullScreen

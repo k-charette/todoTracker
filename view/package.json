@@ -30,6 +30,7 @@
   "eslintConfig": {
     "extends": "react-app"
   },
+  "homepage": "https://todoapp-89149.firebaseapp.com",
   "browserslist": {
     "production": [
       ">0.2%",

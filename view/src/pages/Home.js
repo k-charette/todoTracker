@@ -3,7 +3,7 @@ import axios from 'axios'
 import { authMiddleWare } from '../util/auth'
 import Account from '../components/Account';
 import Todo from '../components/Todo';
-import { Drawer, AppBar, Container, Grid, Paper, CssBaseline, Toolbar, List, Typography, Divider, ListItem, ListItemIcon, CircularProgress } from '@material-ui/core';
+import { Drawer, AppBar, CssBaseline, Toolbar, List, Typography, Divider, ListItem, ListItemIcon, CircularProgress } from '@material-ui/core';
 import IconButton from '@material-ui/core/IconButton';
 import MenuIcon from '@material-ui/icons/Menu';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -66,8 +66,7 @@ const Home = ({history, classes}) => {
                 lastName: response.data.userCredentials.lastName,
                 email: response.data.userCredentials.email,
                 username: response.data.userCredentials.username,
-                profilePicture: response.data.userCredentials.imageUrl,
-                uiLoading: false,
+                profilePicture: response.data.userCredentials.imageUrl
             })
         })
         .catch((error) => {
@@ -82,8 +81,6 @@ const Home = ({history, classes}) => {
     }, [history])
 
     const { uiLoading } = authUser
-
-    const fixedHeightPaper = clsx(classes.paper, classes.fixedHeight)
 
 	if (uiLoading === true) {
         return (
@@ -131,7 +128,7 @@ const Home = ({history, classes}) => {
 									{' '}
 									<NotesIcon />{' '}
 								</ListItemIcon>
-                                <p className='font-sans text-xl sm:text-2xl tracking-wider '>Todo </p>
+                                <p className='font-sans text-xl sm:text-2xl'>Todo </p>
 							</ListItem>
 
 							<ListItem button key="Account" onClick={loadAccountPage}>
@@ -139,14 +136,14 @@ const Home = ({history, classes}) => {
 									{' '}
 									<AccountBoxIcon />{' '}
 								</ListItemIcon>
-                                <p className='font-sans text-xl sm:text-2xl tracking-wider '>Account </p>
+                                <p className='font-sans text-xl sm:text-2xl '>Account </p>
 							</ListItem>
 							<ListItem button key="Logout" onClick={logoutHandler}>
 								<ListItemIcon>
 									{' '}
 									<ExitToAppIcon />{' '}
 								</ListItemIcon>
-                                <p className='font-sans text-xl sm:text-2xl tracking-wider '>Logout </p>
+                                <p className='font-sans text-xl sm:text-2xl'>Logout </p>
 							</ListItem>
 						</List>
 					</Drawer>
@@ -158,7 +155,7 @@ const Home = ({history, classes}) => {
     )
     }
 }
-const drawerWidth = 240
+const drawerWidth = 190
 
 const styles = (theme) => ({
 	root: {

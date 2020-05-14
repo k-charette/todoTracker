@@ -81,6 +81,7 @@ const Login = ({history}) => {
 									name="email"
 									type="text"
 									placeholder="Email"
+									autoComplete='email'
 									onChange={handleChange}
 								/>
 								<p className='text-red-800'>{email}</p>

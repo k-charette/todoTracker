@@ -28,7 +28,6 @@ const styles = (theme) => ({
     content: {
         flexGrow: 1,
         margin: 'auto',
-        flexGrow: 1,
         flexWrap: 'wrap',
         height: '100vh',
         overflow: 'auto',
