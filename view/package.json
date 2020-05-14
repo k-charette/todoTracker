@@ -1,6 +1,5 @@
 {
   "name": "view",
-  "homepage": "https://k-charette.github.io/todoTracker",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
@@ -21,8 +20,6 @@
     "tailwindcss": "^1.4.4"
   },
   "scripts": {
-    "predeploy": "npm run build",
-    "deploy": "gh-pages -d build",
     "start": "npm run watch:css && react-scripts start",
     "build": "npm run build:css && react-scripts build",
     "test": "react-scripts test",
@@ -48,7 +45,6 @@
   "proxy": "https://us-central1-todoapp-89149.cloudfunctions.net/api",
   "devDependencies": {
     "autoprefixer": "^9.7.6",
-    "gh-pages": "^2.2.0",
     "postcss-cli": "^7.1.1"
   }
 }
