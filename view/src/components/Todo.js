@@ -77,6 +77,13 @@ const Todo = ({ classes, history, children, onClose }) => {
                 method: 'put',
                 data: userTodo
             }
+        } 
+        if (buttonType === 'Add') {
+            options = {
+                url: '/todo',
+                method: 'post',
+                data: userTodo
+            }
         } else {
             options = {
                 url: '/todo',
@@ -121,6 +128,22 @@ const Todo = ({ classes, history, children, onClose }) => {
         setOpen(true)
     }
 
+    console.log(buttonType)
+
+    const deleteTodoHandler = (data) => {
+        authMiddleWare(history)
+        const authToken = localStorage.getItem('AuthToken')
+        axios.defaults.headers.common ={ Authorization: `${authToken}`}
+        let todoId = data.todo.todoId
+        
+        axios.delete(`todo/${todoId}`).then(() => {
+            window.location.reload()
+        })
+        .catch((err) => {
+            console.log(err)
+        })
+    }
+
     // const DialogTitle = withStyles(styles)((props) => {
     //     const { ...other } = props
     //     return (
@@ -163,7 +186,7 @@ const Todo = ({ classes, history, children, onClose }) => {
                         <IconButton edge='start' color='inherit' onClick={handleClose} aria-label='close'>
                             <CloseIcon />
                         </IconButton>
-                        <Typography varian='h6' className={classes.title}>
+                        <Typography variant='h6' className={classes.title}>
                             { buttonType === 'Edit' ? 'Edit Todo' : 'Create New Todo' }
                         </Typography>
                         <Button
@@ -239,7 +262,7 @@ const Todo = ({ classes, history, children, onClose }) => {
                                         {' '}
                                         Edit{' '}
                                     </Button>
-                                    <Button size='small' color='primary' >
+                                    <Button size='small' color='primary' onClick={() => deleteTodoHandler({ todo })}>
                                         {' '}
                                         Delete{' '}
                                     </Button>

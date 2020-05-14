@@ -152,13 +152,7 @@ const Home = ({history, classes}) => {
 					</Drawer>
 			<div className={classes.content}>
                 <div className={classes.toolbar}/>
-                <Container fixed className={classes.container}>
-                    <Grid>
-                        <Paper className={fixedHeightPaper}>
-                            {loadPage.render ? <Account /> : <Todo /> }
-                        </Paper>
-                    </Grid>
-                </Container>
+                    {loadPage.render ? <Account /> : <Todo /> }
             </div>
 		</div>
     )
@@ -176,16 +170,6 @@ const styles = (theme) => ({
         height: '100vh',
         padding: theme.spacing(3),
         overflow: 'auto',
-    },
-    container: {
-        paddingTop: theme.spacing(4),
-        paddingBottom: theme.spacing(4)
-    },
-    paper: {
-        padding:theme.spacing(2),
-        display: 'flex',
-        overflow: 'auto',
-        flexDirection: 'column',
     },
 	appBar: {
         zIndex: theme.zIndex.drawer + 1,
