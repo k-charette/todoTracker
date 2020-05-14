@@ -24,13 +24,15 @@
     "build": "npm run build:css && react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
+    "predeploy": "npm run build",
+    "deploy": "gh-pages -d build",
     "build:css": "postcss src/styles/tailwind.css -o src/styles/app.css",
     "watch:css": "postcss src/styles/tailwind.css -o src/styles/app.css"
   },
   "eslintConfig": {
     "extends": "react-app"
   },
-  "homepage": "https://todoapp-89149.firebaseapp.com",
+  "homepage": "https://k-charette.github.io/todoTracker",
   "browserslist": {
     "production": [
       ">0.2%",
@@ -46,6 +48,7 @@
   "proxy": "https://us-central1-todoapp-89149.cloudfunctions.net/api",
   "devDependencies": {
     "autoprefixer": "^9.7.6",
+    "gh-pages": "^2.2.0",
     "postcss-cli": "^7.1.1"
   }
 }
